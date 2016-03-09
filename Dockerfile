@@ -12,4 +12,4 @@ RUN mkdir /app \
 
 EXPOSE 8081
 
-CMD ["python", "/app/sickbeard/SickBeard.py", "--config=$CONFIG", "--data_dir=$DATA"]
+CMD ["python", "/app/sickbeard/SickBeard.py", "--config=$CONFIG", "--datadir=$DATA"]
