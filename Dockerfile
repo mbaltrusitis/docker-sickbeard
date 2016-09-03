@@ -1,15 +1,22 @@
-FROM mbaltrusitis/deb-base:wheezy
+FROM ubuntu:16.04
+MAINTAINER Matthew Baltrusitis <matthew@baltrusitis.com>
 
+ENV DEBIAN_FRONTEND="noninteractive"
 ENV LANG "C"
-ENV CONFIG "/configdata/sickbeard/config.ini"
-ENV DATA "/configdata/sickbeard/data"
+ENV HOME "/opt/sickbeard"
+ENV CONFIGS $HOME/.sickbeard
 
-RUN mkdir /app \
-    && git clone https://github.com/midgetspy/Sick-Beard.git /app/sickbeard \
-    && apt-get -q update \
-    && apt-get install -qqfy --fix-missing \
-        python-cheetah
+RUN mkdir -p "${HOME}" \
+    && apt-get -qy update \
+    && apt-get install -qy --fix-missing \
+        git \
+        python-cheetah \
+        python-openssl \
+    && git clone https://github.com/midgetspy/Sick-Beard.git "${HOME}"
 
 EXPOSE 8081
 
-CMD ["python", "/app/sickbeard/SickBeard.py", "--config=$CONFIG", "--datadir=$DATA"]
+VOLUME ["${CONFIGS}"]
+
+CMD ["python", "opt/sickbeard/SickBeard.py", "--datadir=/opt/sickbeard/.sickbeard"]
+
